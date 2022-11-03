@@ -1,48 +1,40 @@
-//making the correct date
+var saveBtn = $(".saveBtn")
+
 $(document).ready(function () {
-    
-  var moment = moment().format("MMMM Do YYYY");
-    var display = document.getElementById("currentDay");
-    display.innerHTML = moment;
-    var currentHour = moment().format("HH");
-// actions on my buttons as well as clearing  out
-    $("#clearFieldsBtn").click(function (event) {
-       
-      event.preventDefault;
-        $("textarea").val("");
-        localStorage.clear();
-      });
-//my if else statements and my connections with my id from my html page, removing and adding class
-      $(".time-div").each(function () {
-        var timeDiv = $(this).attr("id").split("-")[1];
-        
-        if (currentHour == timeDiv) {
-          $(this).addClass("present");
-          $(this).children(".description").addClass("white-text");
-        } else if (currentHour < timeDiv) {
-          $(this).removeClass("present");
-          $(this).addClass("future");
-        } else if (currentHour > timeDiv) {
-          $(this).removeClass("future");
-          $(this).addClass("past");
+    var date = moment().format('dddd MMM Do')
+    $("#currentDay").text(date)
+   
+    var current = moment().hours()
+    var timeBlock = $(".time-block")
+    timeBlock.each(function() {
+        var hour = parseInt($(this).attr("id"))
+        if(hour === current) {
+            $(this).children(".col-sm-10").attr("class", "present col-sm-10 description")
         }
-      });
+        if(hour < current) {
+            $(this).children(".col-sm-10").attr("class", "past col-sm-10 description")
+        } 
+        if(hour > current) {
+            $(this).children(".col-sm-10").attr("class", "future col-sm-10 description")
+        }
+    })
 
-
-      $(".saveBtn").click(function (event) {
+    saveBtn.on("click", function(event) {
         event.preventDefault();
-        var use = $(this).siblings(".time-cute").val();
-        var timer = $(this).parent().attr("id").split("-")[1];
-        localStorage.setItem(timer, use);
-      });
-// times of the day
- $("#hour-09 .time-cute").val(localStorage.getItem("09"));
-  $("#hour-10 .time-cute").val(localStorage.getItem("10"));
-  $("#hour-11 .time-cute").val(localStorage.getItem("11"));
-  $("#hour-12 .time-cute").val(localStorage.getItem("12"));
-  $("#hour-13 .time-cute").val(localStorage.getItem("13"));
-  $("#hour-14 .time-cute").val(localStorage.getItem("14"));
-  $("#hour-15 .time-cute").val(localStorage.getItem("15"));
-  $("#hour-16 .time-cute").val(localStorage.getItem("16"));
-  $("#hour-17 .time-cute").val(localStorage.getItem("17"));
+        var parentElement = $(this).parent().attr("id")
+        var userText = $(this).siblings(".col-sm-10").val().replace(parentElement)
+
+        localStorage.setItem(parentElement, JSON.stringify(userText))
+    })
+
+    $("#9 textarea").val(JSON.parse(localStorage.getItem("9")))
+    $("#10 textarea").val(JSON.parse(localStorage.getItem("10")))
+    $("#11 textarea").val(JSON.parse(localStorage.getItem("11")))
+    $("#12 textarea").val(JSON.parse(localStorage.getItem("12")))
+    $("#13 textarea").val(JSON.parse(localStorage.getItem("13")))
+    $("#14 textarea").val(JSON.parse(localStorage.getItem("14")))
+    $("#15 textarea").val(JSON.parse(localStorage.getItem("15")))
+    $("#16 textarea").val(JSON.parse(localStorage.getItem("16")))
+    $("#17 textarea").val(JSON.parse(localStorage.getItem("17")))
 });
+
